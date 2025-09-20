@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "homepage": "https://github.com/nishantparashar52/partio",
+  "homepage": "https://nishantparashar52.github.io/partio",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
