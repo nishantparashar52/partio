@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --radius: 1rem;
+}
+
+html { font-size: 16px; } /* better for 18–60 readability */
+body { @apply bg-surface-50 text-gray-800 dark:bg-neutral-950 dark:text-neutral-100; }
+
+.btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 font-medium transition focus:outline-none focus:ring-2 focus:ring-brand-400 disabled:opacity-60 disabled:cursor-not-allowed; }
+.btn-primary { @apply btn bg-brand-600 text-white hover:bg-brand-700 shadow-soft; }
+.btn-ghost { @apply btn bg-transparent hover:bg-black/5 dark:hover:bg-white/10; }
+.input { @apply w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400 dark:bg-neutral-900 dark:border-neutral-700; }
+.card { @apply rounded-2xl border border-gray-200 bg-white/80 backdrop-blur-[6px] shadow-glass dark:bg-white/5 dark:border-white/10; }
+.badge { @apply inline-flex items-center rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-700 dark:bg-white/10 dark:text-gray-200; }
+.pill { @apply inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm hover:bg-black/5 dark:hover:bg-white/10; }
+.skeleton { background: linear-gradient(90deg, rgba(0,0,0,0.06) 25%, rgba(0,0,0,0.12) 37%, rgba(0,0,0,0.06) 63%); background-size: 400px 100%; @apply animate-shimmer rounded-lg; }
