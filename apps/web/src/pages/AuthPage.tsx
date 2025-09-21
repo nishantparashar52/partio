@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { api } from '../lib/api'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../lib/auth';
 
 export default function AuthPage() {
   const nav = useNavigate()
+  const { refresh } = useAuth();
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [code, setCode] = useState('')
@@ -17,7 +19,8 @@ export default function AuthPage() {
 
   const verify = useMutation({
     mutationFn: () => api.verifyOtp({ email, code }),
-    onSuccess: () => nav('/')
+    onSuccess: async () => { await refresh(); nav('/'); }
+
   })
 
   async function showDevInbox() {

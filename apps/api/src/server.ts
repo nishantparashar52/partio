@@ -8,15 +8,24 @@ dotenv.config();
 import authRouter from './routes/auth';
 import partyRouter from './routes/party';
 import requestRouter from './routes/request';
+import healthRouter from './routes/health';
 
 const app = express();
-app.use(cors({ origin: process.env.WEB_ORIGIN || 'http://localhost:5173', credentials: true }));
+
+const allowOrigins = (process.env.WEB_ORIGIN || 'http://localhost:5173')
+  .split(',') // allow comma-separated list if needed
+  .map(s => s.trim());
+
+app.use(cors({ origin: allowOrigins, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
 app.use('/auth', authRouter);
 app.use('/parties', partyRouter);
 app.use('/requests', requestRouter);
+
+app.use('/', healthRouter);
+
 
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/parties';
 const PORT = process.env.PORT || 4000;

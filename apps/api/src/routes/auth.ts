@@ -7,9 +7,11 @@ const router = Router();
 const COOKIE = 'token';
 const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 function setAuthCookie(res: any, userId: string) {
   const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '7d' });
-  res.cookie(COOKIE, token, { httpOnly: true, sameSite: 'lax', secure: false, maxAge: 7*24*60*60*1000 });
+  res.cookie(COOKIE, token, { httpOnly: true, sameSite: isProd ? 'none': 'lax', secure: isProd, maxAge: 7*24*60*60*1000, domain: process.env.COOKIE_DOMAIN || undefined });
 }
 
 router.get('/me', async (req, res) => {

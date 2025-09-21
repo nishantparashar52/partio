@@ -6,6 +6,8 @@ import DashboardPage from './pages/DashboardPage';
 import AuthPage from './pages/AuthPage';
 import { MotionConfig } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { useAuth } from './lib/auth';
+
 
 function ThemeToggle() {
   const [dark, setDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -18,6 +20,7 @@ function ThemeToggle() {
 }
 
 export default function App() {
+  const { user, logout } = useAuth();
   return (
     <MotionConfig reducedMotion="user">{/* respects OS setting */}{/* [8](https://motion.dev/)[9](https://framermotionexamples.com/example/framer-motion-reducedmotion) */}
       <div className="min-h-screen bg-hero-radial">
@@ -28,8 +31,13 @@ export default function App() {
             </Link>
             <div className="flex items-center gap-2">
               <NavLink to="/create" className="btn-primary hidden sm:inline-flex">Create Party</NavLink>
-              <NavLink to="/dashboard" className="btn-ghost">My Parties</NavLink>
-              <NavLink to="/auth" className="btn-ghost">Log in</NavLink>
+              <NavLink to="/dashboard" className="btn-ghost">My Parties</NavLink>              
+              {!user ? (
+                  <Link to="/auth" className="btn">Login</Link>
+                ) : (
+                  <button className="btn" onClick={logout}>Logout</button>
+                )}
+
               <ThemeToggle />
             </div>
           </div>
