@@ -3,11 +3,15 @@ import { useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { useState } from 'react';
+import { useAuth } from '../lib/auth'; // ✅ import auth context hook
+
 
 export default function PartyDetailsPage() {
   const { id = '' } = useParams();
   const qc = useQueryClient();
   const [message, setMessage] = useState('');
+  const { user } = useAuth(); // ✅ get current user
+
 
   const { data, isLoading, error } = useQuery({ queryKey: ['party', id], queryFn: () => api.getParty(id), enabled: !!id });
   const join = useMutation({
@@ -63,6 +67,11 @@ export default function PartyDetailsPage() {
             <button className="btn-primary mt-3 w-full" onClick={() => join.mutate()} disabled={join.isPending}>
               {p.visibility === 'public' ? 'Join Now' : 'Request to Join'}
             </button>
+            {!user && (
+              <div className="mt-2 text-xs text-red-500">
+                You must be logged in to join or request to join a party.
+              </div>
+            )}
             <div className="mt-2 text-xs text-gray-500">We keep actions clear and text legible for all ages (contrast AA+).{/* [5](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html)[6](https://developer.mozilla.org/en-US/docs/Web/Accessibility/Guides/Understanding_WCAG/Perceivable/Color_contrast) */}</div>
           </div>
         </aside>
