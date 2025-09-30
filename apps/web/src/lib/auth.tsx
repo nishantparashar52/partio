@@ -23,6 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function logout() {
     await api.logout();
     setUser(null);
+    window.location.href = '/';
   }
 
   useEffect(() => { refresh(); }, []);

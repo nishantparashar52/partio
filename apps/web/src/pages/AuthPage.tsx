@@ -24,8 +24,8 @@ export default function AuthPage() {
   })
 
   async function showDevInbox() {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE || 'http://localhost:4000'}/auth/dev/inbox`)
-    // const res = await fetch(`${'http://localhost:4000'}/auth/dev/inbox`)
+    // const res = await fetch(`${import.meta.env.VITE_API_BASE || 'http://localhost:4000'}/auth/dev/inbox`)
+    const res = await fetch(`${'http://localhost:4000'}/auth/dev/inbox`)
     const data = await res.json()
     alert(JSON.stringify(data.latest.filter((x: any) => x.email === email)[0] || data.latest[0] || {}, null, 2))
   }

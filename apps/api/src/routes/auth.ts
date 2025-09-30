@@ -26,6 +26,14 @@ router.get('/me', async (req, res) => {
   }
 });
 
+
+router.post("/send-otp", (req, res) => {
+  const { phone } = req.body;
+  console.log(`Sending OTP to ${phone}...`);
+  // Mock send
+  res.json({ success: true, otp: "1111" });
+});
+
 // Request OTP (magic code)
 router.post('/request-otp', async (req, res) => {
   const { email, name } = req.body || {};
@@ -45,17 +53,30 @@ router.post('/request-otp', async (req, res) => {
 
 // Verify OTP
 router.post('/verify-otp', async (req, res) => {
-  const { email, code } = req.body || {};
-  if (!email || !code) return res.status(400).json({ error: 'Email and code required' });
-  const token = await EmailToken.findOne({ email, code });
-  if (!token || token.expiresAt < new Date()) {
-    return res.status(401).json({ error: 'Invalid or expired code' });
+  const { phone, otp } = req.body || {};
+
+  // Basic validation
+  if (!phone || !otp) {
+    return res.status(400).json({ error: 'Phone and OTP required' });
   }
-  const user = await User.findOne({ email });
-  if (!user) return res.status(404).json({ error: 'User not found' });
-  await EmailToken.deleteMany({ email }); // invalidate all
+
+  // ✅ Temporary mock check for OTP (1111)
+  if (otp !== '1111') {
+    return res.status(401).json({ error: 'Invalid OTP' });
+  }
+
+  // Try to find existing user by phone; if not found, create a new user
+  let user = await User.findOne({ phone });
+  if (!user) {
+    user = await User.create({ phone });
+  }
+
+  // Set auth cookie
   setAuthCookie(res, user._id.toString());
-  res.json({ user: { id: user._id, email: user.email, name: user.name } });
+
+  res.json({
+    user: { id: user._id, phone: user.phone }
+  });
 });
 
 // Dev Inbox (list recent codes) – DO NOT use in prod

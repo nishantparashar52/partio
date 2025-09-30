@@ -1,5 +1,5 @@
-export const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000'
-// export const API_BASE = 'http://localhost:4000'
+// export const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000'
+export const API_BASE = 'http://localhost:4000'
 
 async function request(path: string, options: RequestInit = {}) {
   const res = await fetch(`${API_BASE}${path}`, {
@@ -15,7 +15,10 @@ export const api = {
   // Auth (passwordless)
   me: () => request('/auth/me'),
   requestOtp: (data: { email: string; name?: string }) => request('/auth/request-otp', { method: 'POST', body: JSON.stringify(data) }),
-  verifyOtp: (data: { email: string; code: string }) => request('/auth/verify-otp', { method: 'POST', body: JSON.stringify(data) }),
+  verifyOtp: (data: { phone: string; otp: string }) => 
+    request('/auth/verify-otp', { method: 'POST', body: JSON.stringify(data) }),
+  sendPhoneOtp: (data: { phone: string }) => // ✅ new method for send-otp
+    request('/auth/send-otp', { method: 'POST', body: JSON.stringify(data) }),
   logout: () => request('/auth/logout', { method: 'POST' }),
 
   // Parties
